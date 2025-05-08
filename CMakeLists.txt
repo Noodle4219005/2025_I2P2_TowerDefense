@@ -1,10 +1,13 @@
 cmake_minimum_required(VERSION 3.27)
 project(2025_I2P2_TowerDefense)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
 include_directories(.)
 include_directories(Resource)
+include_directories("Resource/audios")
+include_directories("Resource/fonts")
+include_directories("Resource/images")
 
 file(COPY Resource/audios DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 file(COPY Resource/fonts DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
@@ -26,7 +29,9 @@ add_executable(2025_I2P2_TowerDefense
     Enemy/SoldierEnemy.cpp
     Enemy/SoldierEnemy.hpp
     Enemy/TankEnemy.cpp
-    Enemy/TankEnemy.hpp
+    Enemy/TankEnemy.hpp 
+    "Enemy/PlaneEnemy.cpp" 
+    "Enemy/PlaneEnemy.h"
 
     Engine/Allegro5Exception.cpp
     Engine/Allegro5Exception.hpp
@@ -58,6 +63,8 @@ add_executable(2025_I2P2_TowerDefense
     Scene/LoseScene.hpp
     Scene/PlayScene.cpp
     Scene/PlayScene.hpp
+    Scene/SettingsScene.cpp
+    Scene/SettingsScene.hpp
     Scene/StageSelectScene.cpp
     Scene/StageSelectScene.hpp
     Scene/StartScene.cpp
@@ -93,17 +100,7 @@ add_executable(2025_I2P2_TowerDefense
     main.cpp
 )
 
-IF (WIN32)
-    target_include_directories(2025_I2P2_TowerDefense PUBLIC C:/allegro/include)
-    target_link_directories(2025_I2P2_TowerDefense PUBLIC C:/allegro/lib)
-    target_compile_options(2025_I2P2_TowerDefense PUBLIC ${ALLEGRO5_CFLAGS_OTHER})
-    target_link_libraries(2025_I2P2_TowerDefense liballegro_monolith)
-ELSE()
-    find_package(PkgConfig)
-    pkg_check_modules(ALLEGRO5 REQUIRED allegro-5 allegro_main-5 allegro_font-5 allegro_dialog-5 allegro_primitives-5 allegro_image-5 allegro_ttf-5 allegro_audio-5 allegro_acodec-5)
-    target_include_directories(2025_I2P2_TowerDefense PUBLIC lib)
-    target_include_directories(2025_I2P2_TowerDefense PUBLIC ${ALLEGRO5_INCLUDE_DIRS})
-    target_compile_options(2025_I2P2_TowerDefense PUBLIC ${ALLEGRO5_CFLAGS_OTHER})
-    target_link_libraries(2025_I2P2_TowerDefense ${ALLEGRO5_LIBRARIES})
-    target_link_directories(2025_I2P2_TowerDefense PUBLIC ${ALLEGRO5_LIBRARY_DIRS})
-ENDIF()
+find_package(allegro CONFIG REQUIRED)
+target_link_libraries(2025_I2P2_TowerDefense Allegro::allegro Allegro::allegro_main Allegro::allegro_font Allegro::allegro_dialog 
+                      Allegro::allegro_primitives Allegro::allegro_image Allegro::allegro_ttf 
+                      Allegro::allegro_audio Allegro::allegro_acodec)

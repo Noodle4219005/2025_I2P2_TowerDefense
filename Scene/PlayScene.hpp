@@ -40,7 +40,7 @@ public:
     static const float DangerTime;
     static const Engine::Point SpawnGridPoint;
     static const Engine::Point EndGridPoint;
-    static const std::vector<int> code;
+    static const std::vector<int> code[2];
     int MapId;
     float ticks;
     float deathCountDown;
