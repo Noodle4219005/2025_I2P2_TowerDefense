@@ -26,6 +26,7 @@ private:
     };
     ALLEGRO_SAMPLE_ID bgmId;
     std::shared_ptr<ALLEGRO_SAMPLE_INSTANCE> deathBGMInstance;
+    const std::vector<std::pair<int, int>> kMoves={{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
 
 protected:
     int lives;

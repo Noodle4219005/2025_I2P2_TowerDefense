@@ -434,18 +434,28 @@ std::vector<std::vector<int>> PlayScene::CalculateBFSDistance() {
   // Reverse BFS to find path.
   std::vector<std::vector<int>> map(MapHeight, std::vector<int>(std::vector<int>(MapWidth, -1)));
   std::queue<Engine::Point> que;
+  unsigned step=0; // remember the step from the bottom right
   // Push end point.
   // BFS from end point.
   if (mapState[MapHeight - 1][MapWidth - 1] != TILE_DIRT)
     return map;
   que.push(Engine::Point(MapWidth - 1, MapHeight - 1));
-  map[MapHeight - 1][MapWidth - 1] = 0;
+  // map[MapHeight - 1][MapWidth - 1] = 0;
   while (!que.empty()) {
-    Engine::Point p = que.front();
-    que.pop();
-    // TODO PROJECT-1 (1/1): Implement a BFS starting from the most right-bottom block in the map.
-    //               For each step you should assign the corresponding distance to the most right-bottom block.
-    //               mapState[y][x] is TILE_DIRT if it is empty.
+    for (int i=que.size(); i; --i) {
+      Engine::Point p = que.front(); 
+      que.pop();
+      // exception handling
+      if (p.x<0||p.x>=MapWidth||p.y<0||p.y>=MapHeight) continue;
+      if (mapState[p.y][p.x]!=TILE_DIRT) continue;
+      if (map[p.y][p.x]!=-1) continue;
+      map[p.y][p.x]=step;
+      for (auto move : kMoves) {
+        auto [dx, dy]=move;
+        que.emplace(Engine::Point{p.x+dx, p.y+dy});
+      }
+    }
+    ++step;
   }
   return map;
 }
