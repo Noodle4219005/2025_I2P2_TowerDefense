@@ -18,13 +18,11 @@ void Slider::Draw() const {
   End1.Draw();
   End2.Draw();
   ImageButton::Draw();
-  // TODO HACKATHON-5 (3/4): The slider's component should be drawn here.
 }
 void Slider::SetOnValueChangedCallback(std::function<void(float value)> onValueChangedCallback) {
   OnValueChangedCallback = onValueChangedCallback;
 }
 void Slider::SetValue(float value) {
-  // TODO HACKATHON-5 (4/4): Set the value of the slider and call the callback.
   ImageButton::Position.x=Bar.Position.x+value*Bar.Size.x;
   OnValueChangedCallback(value);
 
