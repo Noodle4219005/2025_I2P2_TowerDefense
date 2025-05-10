@@ -50,7 +50,6 @@ const std::vector<int> PlayScene::code[2] = {
     ALLEGRO_KEY_B, ALLEGRO_KEY_A, ALLEGRO_KEY_RSHIFT, ALLEGRO_KEY_ENTER
   }
 };
-
 Engine::Point PlayScene::GetClientSize() {
   return Engine::Point(MapWidth * BlockSize, MapHeight * BlockSize);
 }
@@ -189,9 +188,15 @@ void PlayScene::Update(float deltaTime) {
     // To keep responding when paused.
     preview->Update(deltaTime);
   }
+  for (auto& it : EffectGroup->GetObjects()) {
+    it->Update(deltaTime);
+  }
 }
 void PlayScene::Draw() const {
   IScene::Draw();
+  for (auto& it : EffectGroup->GetObjects()) {
+    it->Draw();
+  }
   if (DebugMode) {
     // Draw reverse BFS distance on all reachable blocks.
     for (int i = 0; i < MapHeight; i++) {
@@ -275,12 +280,8 @@ void PlayScene::OnKeyDown(int keyCode) {
     if (keyStrokes.size()<code[0].size()) goto cheatcode_not_match;
     if (std::equal(keyStrokes.begin(), keyStrokes.end(), code[0].begin())||
         std::equal(keyStrokes.begin(), keyStrokes.end(), code[1].begin())) {
-      Enemy* enemy;
-      const Engine::Point SpawnCoordinate = Engine::Point(SpawnGridPoint.x * BlockSize + BlockSize / 2, SpawnGridPoint.y * BlockSize + BlockSize / 2);
-      EnemyGroup->AddNewObject(enemy=new PlaneEnemy(SpawnCoordinate.x, SpawnCoordinate.y));
+      EffectGroup->AddNewObject(new Plane());
       EarnMoney(10000);
-      enemy->UpdatePath(mapDistance);
-      enemy->Update(ticks);
     }
   }
 cheatcode_not_match:
