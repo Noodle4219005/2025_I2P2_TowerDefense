@@ -14,18 +14,18 @@
 
 PlayScene* Tool::getPlayScene()
 {
-  return dynamic_cast<PlayScene*>(Engine::GameEngine::GetInstance().GetActiveScene());
+    return dynamic_cast<PlayScene*>(Engine::GameEngine::GetInstance().GetActiveScene());
 }
 
 Tool::Tool(std::string imgBase) : Engine::Sprite(imgBase, 0., 0.) {}
 
 void Tool::Update(float deltaTime)
 {
-  Sprite::Update(deltaTime);
-  PlayScene* scene = getPlayScene();
+    Sprite::Update(deltaTime);
+    PlayScene* scene = getPlayScene();
 }
 
-void Tool::Draw() const 
+void Tool::Draw() const
 {
-  Sprite::Draw();
+    Sprite::Draw();
 }

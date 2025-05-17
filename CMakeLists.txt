@@ -103,9 +103,11 @@ add_executable(2025_I2P2_TowerDefense
     "Tool/ToolButton.cpp" 
     "Tool/Tool.h"
     "Tool/Tool.cpp"
+    "Tool/Shovel.cpp"
+    "Tool/Shovel.h"
 
     main.cpp
-    "Tool/Shovel.cpp" "Tool/Shovel.h")
+ "Bullet/RocketBullet.cpp" "Bullet/RocketBullet.h" "Turret/RocketTurret.cpp" "Turret/RocketTurret.h" "Enemy/SlimeEnemy.h"  "Enemy/SmallSlimeEnemy.h" "Enemy/SlimeEnemy.cpp" "Enemy/SmallSlimeEnemy.cpp")
 
 find_package(allegro CONFIG REQUIRED)
 target_link_libraries(2025_I2P2_TowerDefense Allegro::allegro Allegro::allegro_main Allegro::allegro_font Allegro::allegro_dialog 
