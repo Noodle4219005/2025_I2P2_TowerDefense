@@ -282,6 +282,7 @@ void PlayScene::OnMouseUp(int button, int mx, int my)
                 for (auto turret : TowerGroup->GetObjects()) {
                     if (turret->GetObjectIterator()->second->Position.x==x*BlockSize+BlockSize/2&&
                         turret->GetObjectIterator()->second->Position.y==y*BlockSize+BlockSize/2) {
+                        EarnMoney(dynamic_cast<Turret*>(turret)->GetPrice());
                         TowerGroup->RemoveObject(turret->GetObjectIterator());
                         mapState[y][x]=TILE_FLOOR;
                     }
