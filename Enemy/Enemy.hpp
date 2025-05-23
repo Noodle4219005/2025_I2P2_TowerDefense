@@ -16,6 +16,7 @@ protected:
     std::vector<Engine::Point> path;
     float speed;
     float hp;
+    float fullHp;
     int money;
     PlayScene *getPlayScene();
     virtual void OnExplode();
