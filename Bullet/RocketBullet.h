@@ -4,7 +4,7 @@
 class RocketBullet : public Bullet
 {
 private:
-    Enemy* target;
+    std::list<Bullet*>::iterator m_iterInTarget;
     const int kRotateRedian=2*ALLEGRO_PI;
 public:
     RocketBullet(Engine::Point position, Engine::Point forwardDirection, float rotation, Turret* parent);

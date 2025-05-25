@@ -13,23 +13,35 @@
 #include "Scene/PlayScene.hpp"
 #include "Enemy/Enemy.hpp"
 
+
 RocketBullet::RocketBullet(Engine::Point position, Engine::Point forwardDirection, float rotation, Turret *parent) :
     Bullet("play/bullet-3.png", 150, 3, position, forwardDirection, rotation + ALLEGRO_PI / 2, parent) {}
 
 void RocketBullet::Update(float deltaTime) 
 {
     PlayScene* scene=getPlayScene();
-    int minDistance=INT_MAX;
+    float minDistance=FLT_MAX;
+    if (Target) {
+        Engine::Point diff = Target->Position - Position;
+        if (diff.Magnitude() > CollisionRadius) {
+            Target->lockedBullets.erase(m_iterInTarget);
+            Target = nullptr;
+            m_iterInTarget = std::list<Bullet*>::iterator();
+        }
+    }
     if (!Target) {
-        // Lock first seen target.
-        // Can be improved by Spatial Hash, Quad Tree, ...
-        // However simply loop through all enemies is enough for this program.
+        minDistance=FLT_MAX;
+        // Lock the nearest target
         for (auto &it : scene->EnemyGroup->GetObjects()) {
             Engine::Point diff = it->Position - Position;
             if (diff.Magnitude()<minDistance) {
                 Target=dynamic_cast<Enemy *>(it);
                 minDistance=diff.Magnitude();
             }
+        }
+        if (Target!=nullptr) {
+            Target->lockedBullets.emplace_back(static_cast<Bullet*>(this));
+            m_iterInTarget=prev(Target->lockedBullets.end());
         }
     }
     if (Target) {
@@ -50,7 +62,6 @@ void RocketBullet::Update(float deltaTime)
         Rotation = atan2(rotation.y, rotation.x) + ALLEGRO_PI / 2;
         Velocity=Engine::Point(cos(Rotation - ALLEGRO_PI / 2), sin(Rotation - ALLEGRO_PI / 2)).Normalize()*speed;
     }
-
     Bullet::Update(deltaTime);
 }
 
