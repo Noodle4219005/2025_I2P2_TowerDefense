@@ -32,6 +32,7 @@ void Enemy::OnExplode() {
     }
 }
 Enemy::Enemy(std::string img, float x, float y, float radius, float speed, float hp, int money) : Engine::Sprite(img, x, y), speed(speed), hp(hp), money(money) {
+    fullHp=hp;
     CollisionRadius = radius;
     reachEndTime = 0;
 }
@@ -120,4 +121,6 @@ void Enemy::Draw() const {
         // Draw collision radius.
         al_draw_circle(Position.x, Position.y, CollisionRadius, al_map_rgb(255, 0, 0), 2);
     }
+
+    al_draw_line(Position.x-CollisionRadius, Position.y-25, Position.x-CollisionRadius+2*CollisionRadius*hp/fullHp, Position.y-25, al_map_rgb(255, 0, 0), 5);
 }
