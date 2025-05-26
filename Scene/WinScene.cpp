@@ -1,6 +1,7 @@
 #include <functional>
 #include <string>
 #include <fstream>
+#include <chrono>
 
 #include "Engine/AudioHelper.hpp"
 #include "Engine/GameEngine.hpp"
@@ -33,13 +34,11 @@ void WinScene::Initialize() {
     // Handle the user score file
     // FIXME: file invalid check
     std::ifstream ifs;
-    string name, preName;
-    double score, preScore;
+    string name, date;
+    double score;
     _lineCount=0;
     ifs.open("./Resource/scoreboard.txt");
-    while (ifs>>name>>score) {
-        preName=name;
-        preScore=score;
+    while (ifs>>name>>score>>date) {
         ++_lineCount;
     }
     ifs.close();
@@ -51,19 +50,21 @@ void WinScene::Terminate()
     std::ifstream ifs;
     std::ofstream ofs;
     ifs.open("./Resource/scoreboard.txt");
-    std::list<std::pair<string, double>> scores;
+    std::list<std::tuple<string, double, string>> scores;
     for (int i=0; i<_lineCount; ++i) {
-        string name;
+        string name, date;
         double score;
-        ifs>>name>>score;
-        scores.emplace_back(name, score);
+        ifs>>name>>score>>date;
+        scores.emplace_back(name, score, date);
     }
     ofs.open("./Resource/scoreboard.txt", std::ofstream::trunc|std::ofstream::out);
     for (int i=0; i<_lineCount-1; ++i) {
-        ofs<<scores.front().first<<" "<<scores.front().second<<std::endl;
+        auto [name, score, date]=scores.front();
+        ofs<<name<<" "<<score<<" "<<date<<std::endl;
         scores.pop_front();
     }
-    ofs<<inputBox.GetValue()<<" "<<scores.front().second<<std::endl;
+    auto [name, score, date]=scores.front();
+    ofs<<inputBox.GetValue()<<" "<<score<<" "<<date<<std::endl;
     IScene::Terminate();
     AudioHelper::StopBGM(bgmId);
 }

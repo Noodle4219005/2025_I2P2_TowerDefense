@@ -11,6 +11,7 @@ private:
   struct _Score {
     std::string name;
     double score;
+    std::string date;
   };
   typedef struct _Score Score;
   std::vector<Score> m_scores;

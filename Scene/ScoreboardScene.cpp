@@ -21,7 +21,7 @@ void ScoreboardScene::Initialize()
 {
     std::ifstream ifs;
     std::ofstream ofs;
-    std::string name;
+    std::string name, date;
     double score;
     int w = Engine::GameEngine::GetInstance().GetScreenSize().x;
     int h = Engine::GameEngine::GetInstance().GetScreenSize().y;
@@ -35,8 +35,8 @@ void ScoreboardScene::Initialize()
     // FIXME: file invalid check
     m_scores.clear();
     ifs.open("./Resource/scoreboard.txt");
-    while (ifs>>name>>score) {
-        m_scores.emplace_back(Score{name, score});
+    while (ifs>>name>>score>>date) {
+        m_scores.emplace_back(Score{name, score, date});
         ++lineCount;
     }
     ifs.close();
@@ -44,7 +44,7 @@ void ScoreboardScene::Initialize()
     std::sort(m_scores.begin(), m_scores.end(), [](Score A, Score B) { return A.score>B.score;  });
     ofs.open("./Resource/scoreboard.txt", ofstream::trunc|ofstream::out);
     for (auto& i : m_scores) {
-        ofs<<i.name<<" "<<static_cast<int>(i.score)<<std::endl;
+        ofs<<i.name<<" "<<static_cast<int>(i.score)<<" "<<i.date<<std::endl;
     }
     ofs.close();
 
@@ -81,7 +81,7 @@ void ScoreboardScene::UpdateScene()
     int halfW = w / 2;
     int halfH = h / 2;
     std::ifstream ifs;
-    std::string name;
+    std::string name, date;
     int score;
     int offset;
     const int kScoreDisplayLowerBound=Engine::GameEngine::GetInstance().GetScreenSize().y / 4;
@@ -90,13 +90,16 @@ void ScoreboardScene::UpdateScene()
     ifs.open("./Resource/scoreboard.txt");
     ifs.clear();
     ifs.seekg(0);
-    for (int i=0; (i<kScoresPerPage*page)&&(ifs>>name>>score); ++i);
-    for (int i=0; (i<kScoresPerPage)&&(ifs>>name>>score); ++i) {
-        scoreGroup->AddNewObject(new Engine::Label(name, "pirulen.ttf", 36,
-                                                   halfW*1/2, kScoreDisplayLowerBound+kScoreDisplayHeight/kScoresPerPage*i,
+    for (int i=0; (i<kScoresPerPage*page) && (ifs>>name>>score>>date); ++i);
+    for (int i=0; (i<kScoresPerPage) && (ifs>>name>>score>>date); ++i) {
+        scoreGroup->AddNewObject(new Engine::Label(name, "pirulen.ttf", 24,
+                                                   halfW*1/4, kScoreDisplayLowerBound+kScoreDisplayHeight/kScoresPerPage*i,
                                                    0, 255, 0, 255, 0.5, 0.5));
-        scoreGroup->AddNewObject(new Engine::Label(std::to_string(score), "pirulen.ttf", 36,
-                                                   halfW*3/2, kScoreDisplayLowerBound+kScoreDisplayHeight/kScoresPerPage*i,
+        scoreGroup->AddNewObject(new Engine::Label(std::to_string(score), "pirulen.ttf", 24,
+                                                   halfW*3/4, kScoreDisplayLowerBound+kScoreDisplayHeight/kScoresPerPage*i,
+                                                   0, 255, 0, 255, 0.5, 0.5));
+        scoreGroup->AddNewObject(new Engine::Label(date, "pirulen.ttf", 24,
+                                                   halfW*5/4, kScoreDisplayLowerBound+kScoreDisplayHeight/kScoresPerPage*i,
                                                    0, 255, 0, 255, 0.5, 0.5));
     }
     for (auto& i : scoreGroup->GetObjects()) {

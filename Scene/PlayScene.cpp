@@ -7,6 +7,8 @@
 #include <queue>
 #include <string>
 #include <vector>
+#include <chrono>
+#include <ctime>
 
 #include "Enemy/Enemy.hpp"
 #include "Enemy/SoldierEnemy.hpp"
@@ -164,10 +166,16 @@ void PlayScene::Update(float deltaTime) {
                 */
                 // Win.
                 // TODO: winning score adding
+                using namespace std::chrono;
+                using std::to_string;
+                auto time=system_clock::to_time_t(system_clock::now());
+                std::unique_ptr<std::tm> localTime=std::make_unique<std::tm>(*std::localtime(&time));
+                std::string dateString=to_string(localTime->tm_year+1900) + "/" + to_string(localTime->tm_mon+1) + "/" + to_string(localTime->tm_mday)
+                    + "-" + to_string(localTime->tm_hour) + ":" + to_string(localTime->tm_min) + ":" + to_string(localTime->tm_sec);
                 std::ofstream ofs;
                 ofs.open("./Resource/scoreboard.txt", std::ofstream::app);
                 ofs.seekp(0, std::ios_base::end);
-                ofs<<RandomNameGenerator::GetInstance().Generate()<<" "<<static_cast<int>(std::max(1.*lives/kFullLives*120-1.*ticks/10, 0.))<<std::endl;
+                ofs<<RandomNameGenerator::GetInstance().Generate()<<" "<<static_cast<int>(std::max(1.*lives/kFullLives*120-1.*ticks/10, 0.))<<" "<<dateString<<std::endl;
                 ofs.close();
                 Engine::GameEngine::GetInstance().ChangeScene("win");
                 return;
