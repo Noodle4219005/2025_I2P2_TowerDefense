@@ -122,5 +122,8 @@ void Enemy::Draw() const {
         al_draw_circle(Position.x, Position.y, CollisionRadius, al_map_rgb(255, 0, 0), 2);
     }
 
+    // draw hp bar, the border, and the shadow
+    al_draw_filled_rectangle(Position.x - CollisionRadius + 2, Position.y - 27.5 + 2, Position.x + CollisionRadius + 2, Position.y - 22.5 + 2, al_map_rgb(0, 0, 0));
     al_draw_line(Position.x-CollisionRadius, Position.y-25, Position.x-CollisionRadius+2*CollisionRadius*hp/fullHp, Position.y-25, al_map_rgb(255, 0, 0), 5);
+    al_draw_rectangle(Position.x - CollisionRadius, Position.y - 27.5, Position.x + CollisionRadius, Position.y-22.5, al_map_rgb(150, 150, 150), 2);
 }
